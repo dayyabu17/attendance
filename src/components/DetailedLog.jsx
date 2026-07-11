@@ -1,21 +1,6 @@
 import React, { useMemo } from 'react';
 import { List, Download } from 'lucide-react';
-
-function timeToMinutes(tStr) {
-  if (!tStr) return null;
-  const parts = tStr.trim().split(':');
-  if (parts.length !== 2) return null;
-  return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
-}
-
-function formatMinutesToTimeString(mins) {
-  if (mins == null || isNaN(mins)) return 'N/A';
-  const h = Math.floor(mins / 60);
-  const m = mins % 60;
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  const h12 = h % 12 || 12;
-  return `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
-}
+import { timeToMinutes, formatMinutesToTimeString } from '../utils/helpers';
 
 const DetailedLog = ({ 
   analytics, 

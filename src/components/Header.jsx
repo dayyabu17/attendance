@@ -1,11 +1,6 @@
 import React from 'react';
 import { Filter } from 'lucide-react';
-
-function formatMonthOption(ym) {
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const [year, month] = ym.split('-');
-  return `${monthNames[parseInt(month, 10) - 1]} ${year}`;
-}
+import { formatMonthOption } from '../utils/helpers';
 
 const Header = ({ 
   selectedPerson, 
