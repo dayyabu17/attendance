@@ -48,6 +48,13 @@ function App() {
   const [selectedMonth, setSelectedMonth] = useState('All');
   const [selectedWeek, setSelectedWeek] = useState('All');
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(100);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedPerson, selectedMonth, selectedWeek]);
+
   useEffect(() => {
     fetch('/attendance_data.json')
       .then(response => {
@@ -242,6 +249,13 @@ function App() {
       totalLogins: loginCount
     };
   }, [rawData, selectedPerson, selectedMonth, selectedWeek]);
+
+  const paginatedTableDetails = useMemo(() => {
+    if (!analytics) return [];
+    return analytics.tableDetails.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+  }, [analytics, currentPage, rowsPerPage]);
+
+  const totalPages = analytics ? Math.ceil(analytics.tableDetails.length / rowsPerPage) || 1 : 1;
 
   const handleExportCSV = () => {
     if (!analytics || analytics.tableDetails.length === 0) return;
@@ -509,7 +523,7 @@ function App() {
                       </tr>
                     </thead>
                     <tbody>
-                      {analytics.tableDetails.map((row, i) => (
+                      {paginatedTableDetails.map((row, i) => (
                         <tr key={`${row.date}-${row.name}-${i}`}>
                           <td>{row.date}</td>
                           <td style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{row.name}</td>
@@ -533,6 +547,45 @@ function App() {
                       ))}
                     </tbody>
                   </table>
+                </div>
+                
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+                    <span>Rows per page:</span>
+                    <select 
+                      value={rowsPerPage} 
+                      onChange={(e) => { setRowsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+                      style={{ background: 'var(--surface-color)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', borderRadius: '0.25rem', padding: '0.25rem', outline: 'none', cursor: 'pointer' }}
+                    >
+                      <option value={50}>50</option>
+                      <option value={100}>100</option>
+                      <option value={200}>200</option>
+                      <option value={500}>500</option>
+                    </select>
+                    <span style={{ marginLeft: '1rem' }}>
+                      Showing {analytics.tableDetails.length > 0 ? (currentPage - 1) * rowsPerPage + 1 : 0} to {Math.min(currentPage * rowsPerPage, analytics.tableDetails.length)} of {analytics.tableDetails.length} records
+                    </span>
+                  </div>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <button 
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      style={{ padding: '0.5rem 1rem', background: currentPage === 1 ? 'rgba(255,255,255,0.05)' : 'var(--primary)', color: currentPage === 1 ? 'var(--text-secondary)' : 'white', border: 'none', borderRadius: '0.5rem', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', transition: 'all 0.2s', fontFamily: 'inherit', fontWeight: '500' }}
+                    >
+                      Previous
+                    </button>
+                    <span style={{ color: 'var(--text-primary)', fontSize: '0.875rem' }}>
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button 
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      style={{ padding: '0.5rem 1rem', background: currentPage === totalPages ? 'rgba(255,255,255,0.05)' : 'var(--primary)', color: currentPage === totalPages ? 'var(--text-secondary)' : 'white', border: 'none', borderRadius: '0.5rem', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', transition: 'all 0.2s', fontFamily: 'inherit', fontWeight: '500' }}
+                    >
+                      Next
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
