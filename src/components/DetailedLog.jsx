@@ -72,7 +72,7 @@ const DetailedLog = ({
             disabled={isExporting}
             style={{
               display: 'flex', alignItems: 'center', gap: '0.5rem',
-              background: isExporting ? 'var(--text-secondary)' : 'var(--primary)', color: 'white',
+              background: isExporting ? 'var(--border-color)' : 'var(--primary)', color: 'var(--primary-foreground)',
               border: 'none', padding: '0.5rem 1rem',
               borderRadius: '0.5rem', cursor: isExporting ? 'not-allowed' : 'pointer',
               fontSize: '0.875rem', fontWeight: '500',
@@ -157,7 +157,7 @@ const DetailedLog = ({
                 <button 
                   onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  style={{ padding: '0.5rem 1rem', background: currentPage === 1 ? 'rgba(255,255,255,0.05)' : 'var(--primary)', color: currentPage === 1 ? 'var(--text-secondary)' : 'white', border: 'none', borderRadius: '0.5rem', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', transition: 'all 0.2s', fontFamily: 'inherit', fontWeight: '500' }}
+                  style={{ padding: '0.5rem 1rem', background: currentPage === 1 ? 'var(--border-color)' : 'var(--primary)', color: currentPage === 1 ? 'var(--text-secondary)' : 'var(--primary-foreground)', border: 'none', borderRadius: '0.5rem', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', transition: 'all 0.2s', fontFamily: 'inherit', fontWeight: '500' }}
                 >
                   Previous
                 </button>
@@ -167,7 +167,7 @@ const DetailedLog = ({
                 <button 
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  style={{ padding: '0.5rem 1rem', background: currentPage === totalPages ? 'rgba(255,255,255,0.05)' : 'var(--primary)', color: currentPage === totalPages ? 'var(--text-secondary)' : 'white', border: 'none', borderRadius: '0.5rem', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', transition: 'all 0.2s', fontFamily: 'inherit', fontWeight: '500' }}
+                  style={{ padding: '0.5rem 1rem', background: currentPage === totalPages ? 'var(--border-color)' : 'var(--primary)', color: currentPage === totalPages ? 'var(--text-secondary)' : 'var(--primary-foreground)', border: 'none', borderRadius: '0.5rem', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', transition: 'all 0.2s', fontFamily: 'inherit', fontWeight: '500' }}
                 >
                   Next
                 </button>

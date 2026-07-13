@@ -1,5 +1,5 @@
-import React from 'react';
-import { Filter } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Filter, Sun, Moon } from 'lucide-react';
 import { formatMonthOption } from '../utils/helpers';
 
 const Header = ({ 
@@ -11,14 +11,56 @@ const Header = ({
   setSelectedWeek, 
   filterOptions 
 }) => {
+  const [isDark, setIsDark] = useState(() => {
+    return localStorage.getItem('theme') === 'dark' || 
+           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  });
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDark]);
+
   return (
-    <div className="header-container">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <img src="/un_logo.svg" alt="UN Logo" style={{ width: '48px', height: '48px' }} />
-        <h1>Usman Nagarta Attendance</h1>
-      </div>
-      
-      <div className="filters-container">
+    <div className="header-container" style={{ alignItems: 'flex-start' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ color: 'var(--primary)' }}>
+              <path d="M12 42V16C12 9.37258 17.3726 4 24 4C30.6274 4 36 9.37258 36 16V42" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+              <path d="M20 42V20L28 42V20" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M6 42H42" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+            </svg>
+            <h1>Usman Nagarta Attendance</h1>
+          </div>
+          <button 
+            onClick={() => setIsDark(!isDark)}
+            style={{
+              background: 'var(--surface-color)',
+              border: '1px solid var(--border-color)',
+              color: 'var(--text-primary)',
+              padding: '0.5rem',
+              borderRadius: '50%',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'background 0.2s',
+              width: '40px',
+              height: '40px'
+            }}
+            title="Toggle Theme"
+          >
+            {isDark ? <Moon size={20} /> : <Sun size={20} />}
+          </button>
+        </div>
+        
+        <div className="filters-container">
         <div className="filter-group">
           <Filter size={18} color="var(--primary)" />
           <span className="filter-label">Filters:</span>
@@ -84,6 +126,7 @@ const Header = ({
             Clear Filters
           </button>
         )}
+      </div>
       </div>
     </div>
   );
