@@ -93,8 +93,6 @@ export function useAttendanceAnalytics(rawData, selectedPerson, selectedMonth, s
       });
     });
 
-    tableDetails.sort((a, b) => b.date.localeCompare(a.date) || a.name.localeCompare(b.name));
-
     const averageLoginTime = loginCount > 0 
       ? formatMinutesToTimeString(Math.round(totalLoginMinutes / loginCount)) : "N/A";
     const averageLogoutTime = logoutCount > 0 

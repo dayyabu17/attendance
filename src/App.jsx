@@ -36,6 +36,8 @@ function App() {
           ...record,
           WeekStart: getWeekStartString(record.Date)
         }));
+        // Pre-sort by Date (descending) then Name (ascending)
+        processed.sort((a, b) => b.Date.localeCompare(a.Date) || a.Name.localeCompare(b.Name));
         setRawData(processed);
         setLoading(false);
       })
